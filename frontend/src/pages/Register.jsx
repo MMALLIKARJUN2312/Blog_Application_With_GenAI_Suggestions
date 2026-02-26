@@ -3,60 +3,62 @@ import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 
 const Register = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [error, setError] = useState("");
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
     });
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const [error, setError] = useState("");
 
-    try {
-      await API.post("/auth/register", formData);
-      navigate("/login");
-    } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
-    }
-  };
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
 
-  return (
-    <div>
-      <h2>Register</h2>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        try {
+            await API.post("/auth/register", formData);
+            navigate("/login");
+        } catch (err) {
+            setError(err.response?.data?.message || "Registration failed");
+        }
+    };
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
+    return (
+        <div className="auth-wrapper">
+            <div className="auth-card">
+                <h2>Register</h2>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
+                {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <button type="submit">Register</button>
-      </form>
-    </div>
-  );
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    );
 };
 
 export default Register;

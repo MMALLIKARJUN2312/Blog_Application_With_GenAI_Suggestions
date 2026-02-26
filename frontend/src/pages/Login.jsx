@@ -4,63 +4,65 @@ import API from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [error, setError] = useState("");
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
     });
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const [error, setError] = useState("");
 
-    try {
-      const { data } = await API.post("/auth/login", formData);
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
 
-      login(data.token); // save token
-      navigate("/");
-    } catch (err) {
-      setError("Invalid credentials");
-    }
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-  return (
-    <div>
-      <h2>Login</h2>
+        try {
+            const { data } = await API.post("/auth/login", formData);
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+            login(data.token); // save token
+            navigate("/");
+        } catch (err) {
+            setError("Invalid credentials");
+        }
+    };
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
+    return (
+        <div className="auth-wrapper">
+            <div className="auth-card">
+                <h2>Login</h2>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
+                {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <button type="submit">Login</button>
-      </form>
-    </div>
-  );
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    );
 };
 
 export default Login;
