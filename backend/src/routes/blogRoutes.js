@@ -1,16 +1,5 @@
-// Import express router
 import express from "express";
-
-// Import controllers
-import {
-  createBlogController,
-  getAllBlogsController,
-  getBlogByIdController,
-  updateBlogController,
-  deleteBlogController,
-} from "../controllers/blogController.js";
-
-// Import authentication middleware
+import { createBlogController, getAllBlogsController, getBlogByIdController, updateBlogController, deleteBlogController,} from "../controllers/blogController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
 
 // Create router instance
