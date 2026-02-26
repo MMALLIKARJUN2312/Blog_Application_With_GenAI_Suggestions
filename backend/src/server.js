@@ -22,11 +22,9 @@ const aiLimiter = rateLimit({
   },
 });
 
-app.use("/api/ai-suggestions", aiLimiter);
-
 app.use("/api/blogs", blogRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/ai-suggestions", aiRoutes);
+app.use("/api/ai-suggestions",aiLimiter, aiRoutes);
 
 // Health check endpoint
 app.get("/", (req, res) => {

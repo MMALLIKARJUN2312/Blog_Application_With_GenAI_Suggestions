@@ -40,7 +40,7 @@ export const generateSuggestions = async (title, content) => {
 
         return text;
     } catch (error) {
-        console.error("Gemini Service Error:", error);
+        console.error("Gemini Service Error:", error.message);
         throw new Error("AI generation failed");
     }
 };
