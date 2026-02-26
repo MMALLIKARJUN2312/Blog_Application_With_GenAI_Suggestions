@@ -1,65 +1,34 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
-
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-    });
-
-    const [error, setError] = useState("");
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+    const [formData, setFormData] = useState({ email: "", password: "" });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const { data } = await API.post("/auth/login", formData);
-
-            login(data.token); // save token
+            login(data.token);
             navigate("/");
-        } catch (err) {
-            setError("Invalid credentials");
-        }
+        } catch (err) { alert("Invalid credentials"); }
     };
 
     return (
         <div className="auth-wrapper">
-            <div className="auth-card">
-                <h2>Login</h2>
-
-                {error && <p style={{ color: "red" }}>{error}</p>}
-
+            <div className="auth-card glass-card">
+                <h2 style={{textAlign: 'center', marginBottom: '2rem'}}>Welcome Back</h2>
                 <form onSubmit={handleSubmit}>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <button type="submit">Login</button>
+                    <input className="input-field" type="email" name="email" placeholder="Email Address" onChange={(e) => setFormData({...formData, email: e.target.value})} required />
+                    <input className="input-field" type="password" name="password" placeholder="Password" onChange={(e) => setFormData({...formData, password: e.target.value})} required />
+                    <button type="submit" className="btn-primary" style={{width: '100%'}}>Sign In</button>
                 </form>
+                <p style={{marginTop: '2rem', textAlign: 'center', color: 'var(--text-muted)'}}>
+                    No account? <Link to="/register" style={{color: 'var(--primary)', textDecoration: 'none'}}>Join us</Link>
+                </p>
             </div>
         </div>
     );

@@ -1,31 +1,35 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import API from "../services/api";
 
 const BlogDetail = () => {
     const { id } = useParams();
     const [blog, setBlog] = useState(null);
 
-    useEffect(() => {
-        fetchBlog();
-    }, []);
+    useEffect(() => { fetchBlog(); }, [id]);
 
     const fetchBlog = async () => {
         const { data } = await API.get(`/blogs/${id}`);
         setBlog(data);
     };
 
-    if (!blog) return <p>Loading...</p>;
+    if (!blog) return <div className="container"><h3>Loading story...</h3></div>;
 
     return (
         <div className="container">
-            <div className="card">
-                <h2>{blog.title}</h2>
-                <p>By: {blog.author}</p>
+            <header className="detail-header">
+                <h1 className="hero-title" style={{textAlign: 'left'}}>{blog.title}</h1>
+                <div className="post-meta">
+                    <strong>{blog.author}</strong> • {new Date(blog.created_at).toDateString()}
+                </div>
+            </header>
 
-                {/* Render HTML safely */}
-                <div dangerouslySetInnerHTML={{ __html: blog.content }} />
-            </div>
+            <article className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
+
+            <footer className="post-actions">
+                <Link to={`/edit/${blog.id}`}><button className="btn-secondary">Edit Post</button></Link>
+                <button className="btn-danger">Delete</button>
+            </footer>
         </div>
     );
 };

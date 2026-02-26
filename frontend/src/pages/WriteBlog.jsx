@@ -1,83 +1,42 @@
 import { useState } from "react";
 import API from "../services/api";
-import AISuggestions from "../components/AISuggestions";
 
 const WriteBlog = () => {
-    const [formData, setFormData] = useState({
-        title: "",
-        content: "",
-        author: "",
-    });
+    const [formData, setFormData] = useState({ title: "", content: "", author: "" });
+    const [suggestions, setSuggestions] = useState([]);
+    const [loadingAI, setLoadingAI] = useState(false);
 
-    const [suggestions, setSuggestions] = useState("");
-    const [showAI, setShowAI] = useState(false);
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const generateAI = async () => {
-        const { data } = await API.post("/ai-suggestions", {
-            title: formData.title,
-            content: formData.content,
-        });
-
-        setSuggestions(data.suggestions);
-        setShowAI(true);
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        await API.post("/blogs", formData);
-        alert("Blog created!");
+        setLoadingAI(true);
+        try {
+            const { data } = await API.post("/ai-suggestions", formData);
+            setSuggestions(data.suggestions);
+        } finally { setLoadingAI(false); }
     };
 
     return (
         <div className="container">
-            <div className="card">
-                <h2>Write Blog</h2>
+            <div className="write-layout">
+                <div className="editor-main">
+                    <h2 style={{marginBottom: '2rem'}}>Draft your masterpiece</h2>
+                    <input className="input-field" name="title" placeholder="Enter a striking title" onChange={handleChange} />
+                    <input className="input-field" name="author" placeholder="Author name" onChange={handleChange} />
+                    <textarea className="input-field" name="content" placeholder="Tell your story..." onChange={handleChange} />
+                    <button className="btn-primary">Publish Story</button>
+                </div>
 
-                <form onSubmit={handleSubmit}>
-                    <input
-                        name="title"
-                        placeholder="Title"
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <textarea
-                        name="content"
-                        placeholder="Content (Markdown supported)"
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <input
-                        name="author"
-                        placeholder="Author"
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <button type="button" onClick={generateAI}>
-                        Generate AI Suggestions
+                <aside className="ai-panel glass-card">
+                    <h4 style={{color: 'var(--primary)'}}>✨ AI Assistant</h4>
+                    <p style={{fontSize: '0.8rem', color: 'var(--text-muted)', margin: '1rem 0'}}>Stuck? Let the AI help you out.</p>
+                    <button className="btn-secondary" style={{width: '100%'}} onClick={generateAI}>
+                        {loadingAI ? "Thinking..." : "Get Suggestions"}
                     </button>
-
-                    <button type="submit">Publish</button>
-                </form>
-
-                <button onClick={() => setShowAI(!showAI)}>
-                    {showAI ? "Hide AI Suggestions" : "Show AI Suggestions"}
-                </button>
-
-                <AISuggestions
-                    suggestions={suggestions}
-                    visible={showAI}
-                    onGenerate={generateAI}
-                />
+                    {suggestions.map((s, i) => (
+                        <div key={i} className="ai-suggestion-item">{s}</div>
+                    ))}
+                </aside>
             </div>
         </div>
     );

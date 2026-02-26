@@ -12,29 +12,23 @@ const Navigation = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <nav style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>
-      <Link to="/" style={{ marginRight: "10px" }}>
-        Home
-      </Link>
+    <nav>
+      <Link to="/" className="brand">Blogs With GenAI</Link>
 
-      {user && (
-        <Link to="/write" style={{ marginRight: "10px" }}>
-          Write Blog
-        </Link>
-      )}
-
-      {!user ? (
-        <>
-          <Link to="/login" style={{ marginRight: "10px" }}>
-            Login
-          </Link>
-          <Link to="/register">Register</Link>
-        </>
-      ) : (
-        <button onClick={logout} style={{ marginLeft: "10px" }}>
-          Logout
-        </button>
-      )}
+      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+        <Link to="/" className="nav-link">Explore</Link>
+        {user ? (
+          <>
+            <Link to="/write"><button className="btn-primary">Write</button></Link>
+            <button className="btn-secondary" onClick={logout}>Exit</button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="nav-link">Login</Link>
+            <Link to="/register"><button className="btn-primary">Join</button></Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 };
@@ -44,23 +38,12 @@ function App() {
     <AuthProvider>
       <Router>
         <Navigation />
-
         <Routes>
-          {/* Public Routes */}
           <Route path="/" element={<BlogList />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
-          {/* Protected Route */}
-          <Route
-            path="/write"
-            element={
-              <ProtectedRoute>
-                <WriteBlog />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/write" element={<ProtectedRoute><WriteBlog /></ProtectedRoute>} />
         </Routes>
       </Router>
     </AuthProvider>
