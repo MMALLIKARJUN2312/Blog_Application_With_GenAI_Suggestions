@@ -112,10 +112,25 @@ button {
   background: transparent;
   border: 1px solid var(--glass-border);
   color: var(--text-main);
+  margin-right: 1rem;
+}
+
+@media (max-width : 768px) {
+  .btn-secondary {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+  }
 }
 
 .btn-secondary:hover {
   background: rgba(255,255,255,0.05);
+}
+
+.btn-danger {
+  background-color: #ff0000;
+  color: #fff;
 }
 
 /* Blog List Grid */
@@ -131,10 +146,19 @@ button {
   letter-spacing: -2px;
 }
 
+.post-meta {
+  display: flex;
+  justify-content: space-between;margin-bottom: 0.75rem;
+}
+
 .blog-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 2rem;
+}
+
+.blog-content {
+  margin-bottom: 0.75rem;
 }
 
 .post-card {
@@ -224,4 +248,66 @@ textarea.input-field {
 @media (max-width: 900px) {
   .write-layout { grid-template-columns: 1fr; }
   .hero-title { font-size: 2.5rem; }
+}
+
+/* Nav layout fix */
+nav {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Desktop nav */
+.nav-right {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+/* Hamburger hidden on desktop */
+.hamburger {
+  display: none;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .hamburger {
+    display: block;
+  }
+
+  .nav-right {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: white;
+    width: 220px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    gap: 1rem;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    display: none;
+    border-radius: 12px;
+  }
+
+  .nav-right.active {
+    display: flex;
+  }
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-btn svg {
+  stroke-width: 2;
 }
