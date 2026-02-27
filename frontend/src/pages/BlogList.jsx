@@ -29,13 +29,13 @@ const BlogList = () => {
                     <article key={blog.id} className="post-card glass-card">
                         <Link to={`/blog/${blog.id}`} style={{textDecoration: 'none'}}>
                             <h2 className="post-title">{blog.title}</h2>
-                        </Link>
                         <p className="post-preview">
                             {blog.content.replace(/<[^>]*>?/gm, '').substring(0, 120)}...
                         </p>
                         <div className="post-meta">
                             <span style={{color: 'var(--primary)'}}>{blog.author}</span>
                         </div>
+                        </Link>
                     </article>
                 ))}
             </div>
